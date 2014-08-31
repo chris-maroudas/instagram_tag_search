@@ -1,0 +1,17 @@
+
+<%= form_tag articles_path, method: :get do %>
+	<%= text_field_tag :search_term, nil, placeholder: "Search here" %>
+	<%= submit_tag "Search!" %>
+<% end %>
+
+<% unless @results.blank?  %>
+	<h1>Results</h1>
+
+	<% @results.each do |result| %>
+		<h3>Tag: <%= result.name %></h3>
+		<% Instagram.tag_recent_media(result.name).sort_by{ |media| media.likes[:count] }.reverse.each do |media|  %>
+			<%= pluralize media.likes[:count], "like"  %>
+			<%= link_to image_tag(media.images.thumbnail.url), media.images.standard_resolution.url %>
+		<% end  %>
+	<% end  %>
+<% end  %>
